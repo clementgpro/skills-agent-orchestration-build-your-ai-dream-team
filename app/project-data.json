@@ -1,0 +1,60 @@
+{
+  "projects": [
+    {
+      "name": "Nebula Onboarding Revamp",
+      "owner": "Priya Nandakumar",
+      "status": "On Track",
+      "recentActivity": "Completed user testing round 2 with positive feedback.",
+      "priority": "High"
+    },
+    {
+      "name": "Ledger Migration Phase 3",
+      "owner": "Marcus Webb",
+      "status": "At Risk",
+      "recentActivity": "Database cutover delayed pending vendor patch.",
+      "priority": "High"
+    },
+    {
+      "name": "Storefront Redesign",
+      "owner": "Elena Torres",
+      "status": "Delayed",
+      "recentActivity": "Design handoff pushed back two weeks due to staffing gap.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Mobile Push Notifications",
+      "owner": "Sam O'Connell",
+      "status": "On Track",
+      "recentActivity": "Beta rollout reached 50% of test users.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Internal Wiki Cleanup",
+      "owner": "Devon Chu",
+      "status": "On Track",
+      "recentActivity": "Archived 120 stale pages and updated navigation.",
+      "priority": "Low"
+    },
+    {
+      "name": "Payment Gateway Upgrade",
+      "owner": "Aisha Rahman",
+      "status": "At Risk",
+      "recentActivity": "Security review flagged two issues to resolve before launch.",
+      "priority": "Medium"
+    },
+    {
+      "name": "Customer Feedback Portal",
+      "owner": "Liam Foster",
+      "status": "Delayed",
+      "recentActivity": "Waiting on legal sign-off for new survey language.",
+      "priority": "Low"
+    },
+    {
+      "name": "Analytics Dashboard v2",
+      "owner": "Naomi Klein",
+      "status": "On Track",
+      "recentActivity": "New chart library integrated and passing all tests.",
+      "priority": "High"
+    }
+  ]
+}

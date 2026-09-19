@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Pulse</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!--
+    DATA CONTRACT for the Coder (app.js):
+    The file `project-data.json` (fetched by app.js, NOT referenced here) has a
+    top-level "projects" key which is an array of project objects. Each object has:
+      - name (string)
+      - owner (string)
+      - status (string: "On Track" | "At Risk" | "Delayed")
+      - recentActivity (string, short free text describing latest activity)
+      - priority (string: "High" | "Medium" | "Low")
+
+    Status/priority strings should be slugified (lowercased, spaces -> hyphens)
+    to build badge modifier classes, e.g. "On Track" -> "status-on-track",
+    "At Risk" -> "status-at-risk", "High" -> "priority-high".
+  -->
+</head>
+<body>
+  <header class="site-header">
+    <h1>Project Pulse</h1>
+    <p class="site-subtitle">A real-time snapshot of every active project</p>
+  </header>
+
+  <main class="dashboard" id="dashboard">
+
+    <!--
+      SAMPLE PROJECT CARD (structure contract for the Coder):
+      This exact markup shape (element, classes, and nesting) must be
+      replicated in app.js for every project loaded from project-data.json.
+      The sample card below is static placeholder content only — the Coder's
+      JS must remove/clear this sample card before rendering the real,
+      dynamically-generated cards so it doesn't appear alongside live data.
+    -->
+    <article class="project-card">
+      <h2 class="project-name">Sample Project Alpha</h2>
+      <p class="project-owner">Owner: Jordan Rivera</p>
+
+      <span class="status-badge status-on-track">
+        <span class="sr-only">Status:</span>
+        On Track
+      </span>
+
+      <span class="priority-badge priority-high">
+        <span class="sr-only">Priority:</span>
+        High
+      </span>
+
+      <p class="project-activity">Recent activity: Shipped v2.3 release notes and closed 4 open tickets.</p>
+    </article>
+
+    <p class="empty-state" hidden>No projects to display.</p>
+    <p class="error-state" hidden role="alert"></p>
+
+  </main>
+
+  <script>
+    function slugify(value) {
+      return value.toLowerCase().replace(/\s+/g, '-');
+    }
+
+    function createBadge(tagClassPrefix, value, srLabel) {
+      const badge = document.createElement('span');
+      badge.className = `${tagClassPrefix}-badge ${tagClassPrefix}-${slugify(value)}`;
+
+      const srSpan = document.createElement('span');
+      srSpan.className = 'sr-only';
+      srSpan.textContent = `${srLabel}:`;
+      badge.appendChild(srSpan);
+
+      badge.appendChild(document.createTextNode(` ${value}`));
+      return badge;
+    }
+
+    function createProjectCard(project) {
+      const card = document.createElement('article');
+      card.className = 'project-card';
+
+      const name = document.createElement('h2');
+      name.className = 'project-name';
+      name.textContent = project.name;
+      card.appendChild(name);
+
+      const owner = document.createElement('p');
+      owner.className = 'project-owner';
+      owner.textContent = `Owner: ${project.owner}`;
+      card.appendChild(owner);
+
+      card.appendChild(createBadge('status', project.status, 'Status'));
+      card.appendChild(createBadge('priority', project.priority, 'Priority'));
+
+      const activity = document.createElement('p');
+      activity.className = 'project-activity';
+      activity.textContent = `Recent activity: ${project.recentActivity}`;
+      card.appendChild(activity);
+
+      return card;
+    }
+
+    function renderProjects(projects) {
+      const dashboard = document.getElementById('dashboard');
+      const emptyState = dashboard.querySelector('.empty-state');
+      const errorState = dashboard.querySelector('.error-state');
+
+      dashboard.querySelectorAll('.project-card').forEach((card) => card.remove());
+
+      errorState.hidden = true;
+      errorState.textContent = '';
+
+      if (!Array.isArray(projects) || projects.length === 0) {
+        emptyState.hidden = false;
+        return;
+      }
+
+      emptyState.hidden = true;
+
+      projects.forEach((project) => {
+        dashboard.appendChild(createProjectCard(project));
+      });
+    }
+
+    function showError() {
+      const dashboard = document.getElementById('dashboard');
+      const emptyState = dashboard.querySelector('.empty-state');
+      const errorState = dashboard.querySelector('.error-state');
+
+      dashboard.querySelectorAll('.project-card').forEach((card) => card.remove());
+
+      emptyState.hidden = true;
+      errorState.hidden = false;
+      errorState.textContent = 'Unable to load project data. Please try again.';
+    }
+
+    fetch('project-data.json')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        renderProjects(data && data.projects);
+      })
+      .catch((error) => {
+        console.error('Failed to load project data:', error);
+        showError();
+      });
+  </script>
+</body>
+</html>
